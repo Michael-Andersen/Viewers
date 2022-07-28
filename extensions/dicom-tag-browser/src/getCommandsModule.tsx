@@ -1,6 +1,7 @@
 import { utils } from '@ohif/core';
 import React from 'react';
 import DicomTagBrowser from './components/DicomTagBrowser';
+import { useParams, useLocation } from 'react-router';
 
 const { studyMetadataManager } = utils;
 

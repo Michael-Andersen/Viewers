@@ -45,7 +45,7 @@ export default {
     servicesManager,
     commandsManager,
     extensionManager,
-  }) => {return getCommandsModule(servicesManager);},
+  }) => {},
   /**
    * ToolbarModule should provide a list of tool buttons that will be available in OHIF
    * for Modes to consume and use in the toolbar. Each tool button is defined by
@@ -104,7 +104,7 @@ export default {
     servicesManager,
     commandsManager,
     extensionManager,
-  }) => {},
+  }) => {return getCommandsModule(servicesManager);},
   /**
    * ContextModule should provide a list of context that will be available in OHIF
    * and will be provided to the Modes. A context is a state that is shared OHIF.

@@ -185,6 +185,7 @@ export default class ExtensionManager {
       );
       console.log(extensionModule)
       if (extensionModule) {
+        console.log(extensionModule);
         switch (moduleType) {
           case MODULE_TYPES.COMMANDS:
             this._initCommandsModule(extensionModule);
@@ -258,6 +259,7 @@ export default class ExtensionManager {
   _getExtensionModule = (moduleType, extension, extensionId, configuration) => {
     const getModuleFnName = 'get' + _capitalizeFirstCharacter(moduleType);
     const getModuleFn = extension[getModuleFnName];
+    console.log(getModuleFn);
 
     if (!getModuleFn) {
       return;

@@ -14,7 +14,5 @@ const definitions = [
   },
 ];
 
-export default {
-  definitions,
-  defaultContext: 'VIEWER',
-};
+export default
+  definitions;
