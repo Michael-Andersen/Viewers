@@ -52,6 +52,8 @@ export class CommandsManager {
    * @returns {Object} - the matched context
    */
   getContext(contextName) {
+    console.log(this.contexts);
+    console.log("here contexts");
     const context = this.contexts[contextName];
 
     if (!context) {

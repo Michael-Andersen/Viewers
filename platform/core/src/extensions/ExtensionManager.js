@@ -183,7 +183,7 @@ export default class ExtensionManager {
         extensionId,
         configuration
       );
-
+      console.log(extensionModule)
       if (extensionModule) {
         switch (moduleType) {
           case MODULE_TYPES.COMMANDS:
@@ -322,6 +322,8 @@ export default class ExtensionManager {
    * @param {Object[]} commandDefinitions
    */
   _initCommandsModule = extensionModule => {
+    console.log("commandmod")
+    console.log(extensionModule)
     let { definitions, defaultContext } = extensionModule;
     if (!definitions || Object.keys(definitions).length === 0) {
       log.warn('Commands Module contains no command definitions');
@@ -329,8 +331,9 @@ export default class ExtensionManager {
     }
 
     defaultContext = defaultContext || 'VIEWER';
-
+    console.log(defaultContext);
     if (!this._commandsManager.getContext(defaultContext)) {
+      console.log(defaultContext);
       this._commandsManager.createContext(defaultContext);
     }
 

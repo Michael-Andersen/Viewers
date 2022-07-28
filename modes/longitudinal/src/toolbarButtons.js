@@ -314,6 +314,19 @@ const toolbarButtons = [
       },
       items: [
         _createActionButton(
+          'TagBrowser',
+          'list',
+          'Dicom Tag Browser',
+          [
+            {
+              commandName: 'openDICOMTagViewer',
+              commandOptions: {},
+              context: 'TAGBROWSER',
+            },
+          ],
+          'Dicom Tag Browser'
+        ),
+        _createActionButton(
           'Reset',
           'tool-reset',
           'Reset View',
