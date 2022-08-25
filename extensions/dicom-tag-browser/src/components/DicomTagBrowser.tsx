@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { classes} from '@ohif/core';
-import { Range } from '@ohif/ui';
+import { classes } from '@ohif/core';
+import Range from './Range';
 import dcmjs from 'dcmjs';
 import DicomBrowserSelect from './DicomBrowserSelect';
 import moment from 'moment';
@@ -11,7 +11,7 @@ const { ImageSet } = classes;
 const { DicomMetaDictionary } = dcmjs.data;
 const { nameMap } = DicomMetaDictionary;
 
-const  metadataProvider  = classes.MetadataProvider;
+const metadataProvider = classes.MetadataProvider;
 
 const DicomTagBrowser = ({ displaySets, displaySetInstanceUID }) => {
   const [
@@ -24,6 +24,10 @@ const DicomTagBrowser = ({ displaySets, displaySetInstanceUID }) => {
   const [instanceList, setInstanceList] = useState([]);
   const [displaySetList, setDisplaySetList] = useState([]);
   const [isImageStack, setIsImageStack] = useState(false);
+  console.log(displaySetInstanceUID);
+  console.log(displaySets);
+  console.log("activeddsi");
+  console.log(activeDisplaySetInstanceUID);
 
   useEffect(() => {
     const activeDisplaySet = displaySets.find(
@@ -57,38 +61,40 @@ const DicomTagBrowser = ({ displaySets, displaySetInstanceUID }) => {
     });
 
     let metadata;
+    console.log("BIGTEST");
+    console.log(activeDisplaySet);
     const isImageStack =
-      activeDisplaySet instanceof ImageSet &&
-      activeDisplaySet.isSOPClassUIDSupported === true;
+      activeDisplaySet instanceof ImageSet; /*&&
+      activeDisplaySet.isSOPClassUIDSupported === true*/;
 
     let instanceList;
 
-    if (isImageStack) {
-      const { images } = activeDisplaySet;
-      const image = images[activeInstance - 1];
+    const { images } = activeDisplaySet;
+    console.log(images);
+    const image = images[activeInstance - 1];
+    console.log(image);
+    console.log("BIGTEST2");
+    instanceList = images.map((image, index) => {
+      // const metadata = image.getData().metadata;
 
-      instanceList = images.map((image, index) => {
-        const metadata = image.getData().metadata;
+      const { InstanceNumber } = image;
 
-        const { InstanceNumber } = metadata;
+      return {
+        value: index,
+        title: `Instance Number: ${InstanceNumber}`,
+        description: '',
+        onClick: () => {
+          setActiveInstance(index);
+        },
+      };
+    });
 
-        return {
-          value: index,
-          title: `Instance Number: ${InstanceNumber}`,
-          description: '',
-          onClick: () => {
-            setActiveInstance(index);
-          },
-        };
-      });
+    // metadata = image.getData().metadata;
+    // console.log(metadata);
 
-      metadata = image.getData().metadata;
-    } else {
-      metadata = activeDisplaySet.metadata;
-    }
 
-    setTags(getSortedTags(metadata));
-    setMeta(metadata);
+    setTags(getSortedTags(image));
+    setMeta(image);
     setInstanceList(instanceList);
     setDisplaySetList(newDisplaySetList);
     setIsImageStack(isImageStack);
@@ -121,12 +127,14 @@ const DicomTagBrowser = ({ displaySets, displaySetInstanceUID }) => {
 
   return (
     <div className="dicom-tag-browser-content">
-      <DicomBrowserSelect
-        value={selectedDisplaySetValue}
-        formatOptionLabel={DicomBrowserSelectItem}
-        options={displaySetList}
-      />
-      {instanceSelectList}
+      <header className="sticky">
+        <DicomBrowserSelect
+          value={selectedDisplaySetValue}
+          formatOptionLabel={DicomBrowserSelectItem}
+          options={displaySetList}
+        />
+        {instanceSelectList}
+      </header>
       <div className="dicom-tag-browser-table-wrapper">
         <DicomTagTable tags={tags} meta={meta}></DicomTagTable>
       </div>

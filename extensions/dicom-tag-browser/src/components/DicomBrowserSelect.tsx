@@ -11,10 +11,10 @@ const DicomBrowserSelect = ({ value, formatOptionLabel, options }) => (
 );
 
 const computedstyle = getComputedStyle(document.body);
-const uiGrayDarker = computedstyle.getPropertyValue('--ui-gray-darker');
-const activeColor = computedstyle.getPropertyValue('--active-color');
-const defaultColor = computedstyle.getPropertyValue('--default-color');
-const uiGrayDark = computedstyle.getPropertyValue('--ui-gray-dark');
+const uiGrayDarker = "#151A1F";
+const activeColor = "#20A5D6";
+const defaultColor = "#9CCEF9";
+const uiGrayDark = "#16202B";
 
 const dicomBrowserSelectStyles = {
   singleValue: (base, state) => ({
