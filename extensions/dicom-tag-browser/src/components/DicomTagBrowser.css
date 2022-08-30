@@ -6,6 +6,7 @@
 .dicom-tag-browser-table-wrapper {
 /*  height: 500px;*/
   /*overflow-y: scroll;*/
+  overflow-x: scroll;
 }
 
 .dicom-tag-browser-table tr {

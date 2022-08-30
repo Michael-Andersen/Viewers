@@ -315,7 +315,7 @@ const toolbarButtons = [
       items: [
         _createActionButton(
           'TagBrowser',
-          'list',
+          'list-bullets',
           'Dicom Tag Browser',
           [
             {

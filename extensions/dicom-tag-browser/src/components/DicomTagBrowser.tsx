@@ -30,7 +30,7 @@ const DicomTagBrowser = ({ displaySets, displaySetInstanceUID }) => {
   console.log(activeDisplaySetInstanceUID);
 
   useEffect(() => {
-    const activeDisplaySet = displaySets.find(
+    var activeDisplaySet = displaySets.find(
       ds => ds.displaySetInstanceUID === activeDisplaySetInstanceUID
     );
 
@@ -63,38 +63,51 @@ const DicomTagBrowser = ({ displaySets, displaySetInstanceUID }) => {
     let metadata;
     console.log("BIGTEST");
     console.log(activeDisplaySet);
+    if (!activeDisplaySet) {
+      if (!displaySets || displaySets.length == 0) {
+        return;
+      } else {
+        activeDisplaySet = displaySets[0];
+        setActiveDisplaySetInstanceUID(displaySets[0].displaySetInstanceUID);
+      }
+
+    }
     const isImageStack =
       activeDisplaySet instanceof ImageSet; /*&&
       activeDisplaySet.isSOPClassUIDSupported === true*/;
 
     let instanceList;
+    if (isImageStack) {
+      const { images } = activeDisplaySet;
 
-    const { images } = activeDisplaySet;
-    console.log(images);
-    const image = images[activeInstance - 1];
-    console.log(image);
-    console.log("BIGTEST2");
-    instanceList = images.map((image, index) => {
-      // const metadata = image.getData().metadata;
+      console.log(images);
+      const image = images[activeInstance - 1];
+      console.log(image);
+      console.log("BIGTEST2");
+      instanceList = images.map((image, index) => {
+        // const metadata = image.getData().metadata;
 
-      const { InstanceNumber } = image;
+        const { InstanceNumber } = image;
 
-      return {
-        value: index,
-        title: `Instance Number: ${InstanceNumber}`,
-        description: '',
-        onClick: () => {
-          setActiveInstance(index);
-        },
-      };
-    });
-
+        return {
+          value: index,
+          title: `Instance Number: ${InstanceNumber}`,
+          description: '',
+          onClick: () => {
+            setActiveInstance(index);
+          },
+        };
+      });
+      metadata = image;
+    } else {
+      metadata = activeDisplaySet;
+    }
     // metadata = image.getData().metadata;
     // console.log(metadata);
 
 
-    setTags(getSortedTags(image));
-    setMeta(image);
+    setTags(getSortedTags(metadata));
+    setMeta(metadata);
     setInstanceList(instanceList);
     setDisplaySetList(newDisplaySetList);
     setIsImageStack(isImageStack);
@@ -127,7 +140,7 @@ const DicomTagBrowser = ({ displaySets, displaySetInstanceUID }) => {
 
   return (
     <div className="dicom-tag-browser-content">
-      <header className="sticky">
+      <header>
         <DicomBrowserSelect
           value={selectedDisplaySetValue}
           formatOptionLabel={DicomBrowserSelectItem}
