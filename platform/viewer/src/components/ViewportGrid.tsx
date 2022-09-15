@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { ViewportGrid, ViewportPane, useViewportGrid } from '@ohif/ui';
 import EmptyViewport from './EmptyViewport';
 import classNames from 'classnames';
+import { classes } from '@ohif/core';
 
 function ViewerViewportGrid(props) {
   const { servicesManager, viewportComponents, dataSource } = props;
   const [viewportGrid, viewportGridService] = useViewportGrid();
+  const { ImageSet } = classes;
 
   const { numCols, numRows, activeViewportIndex, viewports } = viewportGrid;
 
@@ -58,13 +60,31 @@ function ViewerViewportGrid(props) {
             }
 
             displaySetUIDsToHang.push(displaySetInstanceUID);
-            displaySetUIDsToHangOptions.push(displaySetOptions);
+            if (Array.isArray(displaySetOptions)) {
+              if (displaySetOptions.length > 0) {
+                displaySetUIDsToHangOptions.push(...displaySetOptions);
+              } else {
+                displaySetUIDsToHangOptions.push({});
+              }
+            } else {
+              displaySetUIDsToHangOptions.push(displaySetOptions);
+            }
           }
         );
 
         if (!displaySetUIDsToHang.length) {
-          continue;
+          const suitableDisplaySet = availableDisplaySets.find(ds => {
+            return ds instanceof ImageSet;
+          });
+          if (!suitableDisplaySet) {
+            continue;
+          }
+          displaySetUIDsToHang.push(suitableDisplaySet.displaySetInstanceUID);
+
+          displaySetUIDsToHangOptions.push({});
         }
+
+
 
         viewportGridService.setDisplaySetsForViewport({
           viewportIndex: i,
